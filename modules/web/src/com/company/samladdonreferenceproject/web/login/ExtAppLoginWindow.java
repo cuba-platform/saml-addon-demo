@@ -26,7 +26,6 @@ import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.core.sys.AppContext;
 import com.haulmont.cuba.core.sys.SecurityContext;
-import com.haulmont.cuba.gui.components.HasValue;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.executors.BackgroundWorker;
@@ -76,9 +75,9 @@ public class ExtAppLoginWindow extends AppLoginWindow {
     protected WebAuthConfig webAuthConfig;
 
     @Inject
-    protected Label ssoLookupFieldLabel;
+    protected Label<String> ssoLookupFieldLabel;
     @Inject
-    protected LookupField ssoLookupField;
+    protected LookupField<SamlConnection> ssoLookupField;
 
     protected RequestHandler samlCallbackRequestHandler = this::handleSamlCallBackRequest;
 
@@ -94,8 +93,8 @@ public class ExtAppLoginWindow extends AppLoginWindow {
         ssoLookupFieldLabel.setVisible(!CollectionUtils.isEmpty(ssoLookupField.getOptionsList()));
         ssoLookupField.setVisible(!CollectionUtils.isEmpty(ssoLookupField.getOptionsList()));
         ssoLookupField.addValueChangeListener(e -> {
-            if (((HasValue.ValueChangeEvent) e).getValue() != null) {
-                SamlConnection connection = (SamlConnection) ((HasValue.ValueChangeEvent) e).getValue();
+            if (e.getValue() != null) {
+                SamlConnection connection = e.getValue();
                 VaadinSession.getCurrent().getSession().setAttribute(SamlSessionPrincipal.SAML_CONNECTION_CODE, connection.getSsoPath());
                 Page.getCurrent().setLocation(getLoginUrl());
             }
