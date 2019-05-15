@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.10.8'
+    ext.cubaVersion = '7.0.3'
     repositories {
         
         mavenLocal()
@@ -59,7 +59,7 @@ dependencies {
 
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'java')
@@ -98,7 +98,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compile(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
 
@@ -143,7 +143,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compile(servletApi)
         compile(globalModule)
 
     }
@@ -185,10 +185,6 @@ configure(webModule) {
         appJars(modulePrefix + '-global', modulePrefix + '-web')
     }
 }
-
-
-
-
 
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")
